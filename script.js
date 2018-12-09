@@ -1,5 +1,17 @@
-const noteBoard = document.querySelector("#noteBoard");
 let listOfNotes = [];
+
+const searchBar = document.querySelector("#searchBar");
+searchBar.addEventListener("keyup", function(e) {
+  const searchInput = e.target.value.toLowerCase();
+
+  const newArray = listOfNotes.filter(function(element) {
+    return element.childNodes[1].childNodes[1].childNodes[0].nodeValue
+      .toLowerCase()
+      .match(searchInput);
+  });
+
+  displayNoteBoard(newArray);
+});
 
 document.getElementById("addButton").addEventListener("click", function() {
   const noteId = IDGenerator();
@@ -39,6 +51,8 @@ function IDGenerator() {
 }
 
 function displayNoteBoard(array) {
+  const noteBoard = document.querySelector("#noteBoard");
+  noteBoard.innerHTML = "";
   array.forEach(element => {
     noteBoard.appendChild(element);
   });
