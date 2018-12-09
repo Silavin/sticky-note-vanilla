@@ -10,21 +10,7 @@ document.getElementById("addButton").addEventListener("click", function() {
 
   addEditListener(noteId);
 
-  document
-    .getElementById(`deleteButton${noteId}`)
-    .addEventListener("click", function() {
-      const stickyNote = document.querySelector(`#stickyContainer${noteId}`);
-
-      const length = listOfNotes.length;
-      for (let i = 0; i < length; i++) {
-        if (listOfNotes[i] === stickyNote) {
-          listOfNotes.splice(i, 1);
-        }
-      }
-
-      stickyNote.parentNode.removeChild(stickyNote);
-      displayNoteBoard(listOfNotes);
-    });
+  addDeleteListener(noteId);
 });
 
 function createStickyNote(noteId) {
@@ -131,5 +117,23 @@ function addEditListener(noteId) {
       replaceEditToSave(noteId);
 
       addSaveListener(noteId);
+    });
+}
+
+function addDeleteListener(noteId) {
+  document
+    .getElementById(`deleteButton${noteId}`)
+    .addEventListener("click", function() {
+      const stickyNote = document.querySelector(`#stickyContainer${noteId}`);
+
+      const length = listOfNotes.length;
+      for (let i = 0; i < length; i++) {
+        if (listOfNotes[i] === stickyNote) {
+          listOfNotes.splice(i, 1);
+        }
+      }
+
+      stickyNote.parentNode.removeChild(stickyNote);
+      displayNoteBoard(listOfNotes);
     });
 }
