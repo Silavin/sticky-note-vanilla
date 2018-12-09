@@ -1,33 +1,57 @@
 const noteBoard = document.querySelector("#noteBoard");
-const listOfNotes = [];
+let listOfNotes = [];
 
 document.getElementById("addButton").addEventListener("click", function() {
-  const noteId = listOfNotes.length;
-  const createdSticky = document.createElement("div");
-  const sticky = `
-  <div id="stickyNote${noteId}">
-    <h3 id="noteTitle${noteId}">Title</h3>
-    <p id="noteContent${noteId}">Paragraph</p>
-    <div>
-        <button id="editButton${noteId}">Edit</button>
-        <button id="deleteButton${noteId}">Delete</button>
-    </div>
-  </div>`;
-  createdSticky.innerHTML = sticky;
+  const noteId = IDGenerator();
 
-  listOfNotes.push(createdSticky);
+  createStickyNote(noteId);
 
-  displayNoteBoard(noteId);
+  displayNoteBoard(listOfNotes);
 
   addEditListener(noteId);
 
   document
     .getElementById(`deleteButton${noteId}`)
     .addEventListener("click", function() {
+      const stickyNote = document.querySelector(`#stickyContainer${noteId}`);
+      stickyNote.parentNode.removeChild(stickyNote);
+
       listOfNotes.splice(noteId, 1);
-      displayNoteBoard();
+      displayNoteBoard(listOfNotes);
     });
 });
+
+function createStickyNote(noteId) {
+  const createdSticky = document.createElement("div");
+  createdSticky.setAttribute("id", `stickyContainer${noteId}`);
+  const sticky = `
+      <div class="stickyNotes">
+        <h3 id="noteTitle${noteId}">Title</h3>
+        <p id="noteContent${noteId}">Paragraph</p>
+        <div>
+            <button id="editButton${noteId}">Edit</button>
+            <button id="deleteButton${noteId}">Delete</button>
+        </div>
+      </div>`;
+  createdSticky.innerHTML = sticky;
+
+  listOfNotes.push(createdSticky);
+}
+
+function IDGenerator() {
+  const timestamp = +new Date();
+  const ts = timestamp.toString();
+  const parts = ts.split("").reverse();
+  parts.join("");
+
+  return parts.join("");
+}
+
+function displayNoteBoard(array) {
+  array.forEach(element => {
+    noteBoard.appendChild(element);
+  });
+}
 
 function replaceTitleToInput(noteId) {
   const title = document.getElementById(`noteTitle${noteId}`);
@@ -103,10 +127,4 @@ function addEditListener(noteId) {
 
       addSaveListener(noteId);
     });
-}
-
-function displayNoteBoard() {
-  listOfNotes.forEach(element => {
-    noteBoard.appendChild(element);
-  });
 }
