@@ -14,9 +14,15 @@ document.getElementById("addButton").addEventListener("click", function() {
     .getElementById(`deleteButton${noteId}`)
     .addEventListener("click", function() {
       const stickyNote = document.querySelector(`#stickyContainer${noteId}`);
-      stickyNote.parentNode.removeChild(stickyNote);
 
-      listOfNotes.splice(noteId, 1);
+      const length = listOfNotes.length;
+      for (let i = 0; i < length; i++) {
+        if (listOfNotes[i] === stickyNote) {
+          listOfNotes.splice(i, 1);
+        }
+      }
+
+      stickyNote.parentNode.removeChild(stickyNote);
       displayNoteBoard(listOfNotes);
     });
 });
@@ -40,11 +46,10 @@ function createStickyNote(noteId) {
 
 function IDGenerator() {
   const timestamp = +new Date();
-  const ts = timestamp.toString();
-  const parts = ts.split("").reverse();
-  parts.join("");
+  const timeStampString = timestamp.toString();
+  const randomNumbersArray = timeStampString.split("").reverse();
 
-  return parts.join("");
+  return randomNumbersArray.join("");
 }
 
 function displayNoteBoard(array) {
